@@ -1,0 +1,170 @@
+<?php
+
+namespace EticketBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Order
+ *
+ * @ORM\Table(name="louvre.order")
+ * @ORM\Entity(repositoryClass="EticketBundle\Repository\OrderRepository")
+ */
+
+class Order
+{
+    /**
+     * @ORM\OneToMany(targetEntity="EticketBundle\Entity\Ticket", mappedBy="order")
+     */
+    private $tickets;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="EticketBundle\Entity\Type")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adresse", type="string", length=255)
+     */
+    private $adresse;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nombre", type="integer")
+     */
+    private $nombre;
+
+    public function __construct()
+    {
+        $this->date = new \Datetime();
+
+    }
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Order
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     *
+     * @return Order
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param integer $nombre
+     *
+     * @return Order
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return int
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+
+
+    /**
+     * Set type
+     *
+     * @param \EticketBundle\Entity\Type $type
+     *
+     * @return Order
+     */
+    public function setType(\EticketBundle\Entity\Type $type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \EticketBundle\Entity\Type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+}

@@ -1,0 +1,27 @@
+{% extends "EticketBundle::layout.html.twig" %}
+{% block title %}{{parent()}} - Ticket{% endblock %}
+
+{% block selection %}
+
+
+Commande n° {{ order.id }}
+
+
+        <div class="well">
+        <h3> Votre commande : {{ order.tickets|length }} Billet  </h3>
+            <p>Date de réservation : {{ order.date|date('d/m/Y') }}</p>
+            <p>Type de billet :{{ order.type.name }}</p>
+
+            {% for ticket in order.tickets %}
+                <hr>
+                <p>Nom : {{ ticket.lastname}}</p>
+                <p>Prénom : {{ ticket.firstname }}</p>
+                <p>Tarif :{{ticket.getTarif (ticket.birthdate)}} euros</p>
+{%endfor %}
+
+
+        </div>
+
+
+
+{% endblock %}

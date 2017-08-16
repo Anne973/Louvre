@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Eticket Louvre{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    {% endblock %}
+
+</head>
+<body>
+<div class="container">
+    <div id="header" class="row" style="background-color: lightgrey; padding-top: 20px">
+        <div class="col-sm-3">
+            <a href="http://www.louvre.fr/">Site du musée du Louvre</a>
+        </div>
+
+        <div class="col-sm-6">
+            <h1 style="text-align:center">Le Louvre</h1>
+
+            <hr>
+            <p style="text-align:center">Billetterie en ligne</p>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" style="text-align:right">Langue <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Français</a></li>
+                    <li><a href="#">Anglais</a></li>
+                </ul>
+            </div>
+            <div>
+            </div>
+
+            {# On affiche tous les messages flash dont le nom est « info » #}
+
+            {% for message in app.session.flashbag.get('info') %}
+
+                <p class="alert alert-info">Message flash : {{ message }}</p>
+
+            {% endfor %}
+
+        </div>
+    </div>
+    <div class="row" style="background-color:grey">
+        <div class="col-sm-8">
+            {% block selection %}
+                <section class="row">
+                    <div class="col-sm-4 thumbnail"><img src="{{ asset('images/Louvre2.jpg') }}" ></div>
+                    <div class="col-sm-4 thumbnail"><img src="{{ asset('images/Louvre3.jpg') }}"></div>
+                    <div class="col-sm-4 thumbnail"><img src="{{ asset('images/Louvre4.jpg') }}"></div>
+                </section>
+                <a  href="{{ path('eticket_selection') }}"> <button type="button" class="btn btn-primary btn-lg btn-block" style="display:block">Sélectionnez vos billets</button></a>
+            {% endblock %}
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Réservations</h3>
+                    <p>Le musée est ouvert tous les jours sauf le mardi (et fermé les 1er mai, 30 novembre et 25 décembre).</p>
+                </div>
+                <div class="col-sm-12">
+                    <h3>Tarifs</h3>
+                    <p>Le musée propose plusieurs types de tarifs:
+                    <ul>
+                        <li>un tarif normal à partir de 12 ans à 16 euros</li>
+                        <li>un tarif enfant à partir de 4 ans et jusqu'à 12 ans, à 8 euros</li>
+                        <li>un tarif senior à partir de 60 ans à 12 euros</li>
+                        <li>un tarif réduit accoré dans certaines conditions (étudiant, employé du musée, d'un service du ministère de la culture, militaire)</li>
+                    </ul>
+                    L'entrée est gratuite pour les enfants de moins de 4 ans.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <hr>
+    <p>Paiement 100% sécurisé
+        <i class="fa fa-cc-visa fa-4x " aria-hidden="true" ></i>
+        <i class="fa fa-cc-mastercard fa-4x" aria-hidden="true"></i>
+        <i class="fa fa-cc-stripe fa-4x" aria-hidden="true"></i>
+    </p>
+    <footer style="background:black; color:white">
+        <h3 style ="text-align:center">Musée du Louvre </h3>
+        <ul style="text-align:center" class="list-inline">
+            <li>Home |</li>
+            <li>Mentions légales |</li>
+            <li>Contact</li>
+        </ul>
+    </footer>
+
+    {% block javascripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    {% endblock %}
+</div>
+
+</body>
+</html>

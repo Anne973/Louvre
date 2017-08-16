@@ -1,0 +1,12 @@
+eticket_homepage:
+    path:     /
+    defaults: { _controller: EticketBundle:Home:index }
+
+
+eticket_selection:
+    path:     /selection
+    defaults: { _controller: EticketBundle:Order:select }
+
+eticket_ticket:
+    path:     /ticket/{id}
+    defaults: { _controller: EticketBundle:Order:ticket }

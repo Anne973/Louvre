@@ -1,0 +1,128 @@
+{% extends "EticketBundle::layout.html.twig" %}
+{% block title %}{{parent()}} - Sélection{% endblock %}
+
+{% block selection %}
+
+<div class="well">
+
+
+    <h3>Reservation</h3>
+
+    <div class="well">
+        {{ form_start(form)}}
+
+        {# Les erreurs générales du formulaire. #}
+        {{ form_errors(form) }}
+
+        {# Génération du label + error + widget pour un champ. #}
+        <div class="form-group">
+            <p>{{ form_label(form.date, "Choisissez une date", {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_errors(form.date) }}
+
+            </p>
+
+            <p>
+                {{ form_widget(form.date) }}
+            </p>
+        </div>
+        <div class="form-group">
+        <p>{{ form_label(form.type, "Choisissez un type de billet", {'label_attr': {'class':'control-label'}})}}</p>
+            <p> {{ form_widget(form.type) }}
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>{{ form_label(form.tickets, "Choisissez un tarif", {'label_attr': {'class':'control-label'}})}}</p>
+            <p> {{ form_widget(form.tickets) }}
+            {#{{ form_row(form.tickets) }}#}
+        <a href="#" id="add_ticket" class="btn btn-primary">Ajouter un billet</a>
+        </div>
+
+        <div class="form-group">
+            <p>{{ form_label(form.adresse, "Entrez votre adresse email", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.adresse) }}
+            </p>
+
+            <p>
+                {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+            </p>
+        </div>
+
+
+
+        {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+
+
+        {# Fermeture de la balise <form> du formulaire HTML #}
+        {{ form_end(form) }}
+    </div>
+</div>
+    {% block javascripts %}{{parent()}}{% endblock %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        // On récupère la balise <div> qui contient l'attribut « data-prototype » qui nous intéresse.
+        var $container = $('div#order_tickets');
+
+        // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+        var index = $container.find(':input').length;
+
+        // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+        $('#add_ticket').click(function(e) {
+            addTicket($container);
+
+            e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+            return false;
+        });
+
+        // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+        if (index == 0) {
+            addTicket($container);
+        } else {
+            // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+            $container.children('div').each(function() {
+                addDeleteLink($(this));
+            });
+        }
+
+
+        function addTicket($container) {
+
+            var template = $container.attr('data-prototype')
+                .replace(/__name__label__/g, 'Billet n°' + (index+1))
+                .replace(/__name__/g,        index)
+            ;
+
+            // On crée un objet jquery qui contient ce template
+            var $prototype = $(template);
+
+            // On ajoute au prototype un lien pour pouvoir supprimer le billet
+            addDeleteLink($prototype);
+
+            // On ajoute le prototype modifié à la fin de la balise <div>
+            $container.append($prototype);
+
+            // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+            index++;
+        }
+
+        // La fonction qui ajoute un lien de suppression d'une catégorie
+        function addDeleteLink($prototype) {
+            // Création du lien
+            var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+            // Ajout du lien
+            $prototype.append($deleteLink);
+
+            // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+            $deleteLink.click(function(e) {
+                $prototype.remove();
+
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+        }
+    });
+</script>
+{% endblock %}
