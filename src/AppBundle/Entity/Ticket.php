@@ -1,19 +1,19 @@
 <?php
 
-namespace EticketBundle\Entity;
+namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Ticket
  *
- * @ORM\Table(name="ticket")
- * @ORM\Entity(repositoryClass="EticketBundle\Repository\TicketRepository")
+ * @ORM\Table(name="louvre.ticket")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TicketRepository")
  */
 class Ticket
 {
     /**
-     * @ORM\ManyToOne(targetEntity="EticketBundle\Entity\Order", inversedBy="tickets")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Order", inversedBy="tickets")
      * @ORM\JoinColumn(nullable=false)
      */
     private $order;
@@ -57,6 +57,13 @@ class Ticket
 
 
     private $price;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255)
+     */
+    private $country;
 
 
     /**
@@ -136,11 +143,11 @@ class Ticket
     /**
      * Set order
      *
-     * @param \EticketBundle\Entity\Order $order
+     * @param \AppBundle\Entity\Order $order
      *
      * @return Ticket
      */
-    public function setOrder(\EticketBundle\Entity\Order $order)
+    public function setOrder(\AppBundle\Entity\Order $order)
     {
         $this->order = $order;
 
@@ -150,7 +157,7 @@ class Ticket
     /**
      * Get order
      *
-     * @return \EticketBundle\Entity\Order
+     * @return \AppBundle\Entity\Order
      */
     public function getOrder()
     {
@@ -231,4 +238,28 @@ class Ticket
         else {return 10;}
     }
 
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Ticket
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
 }

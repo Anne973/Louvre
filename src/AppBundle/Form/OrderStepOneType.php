@@ -1,19 +1,18 @@
 <?php
 
-namespace EticketBundle\Form;
+namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class OrderType extends AbstractType
+class OrderStepOneType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -21,19 +20,16 @@ class OrderType extends AbstractType
         $builder
             ->add('date', DateType::class)
             ->add('type', EntityType::class, array(
-                'class'        => 'EticketBundle:Type',
+                'class'        => 'AppBundle:Type',
                 'choice_label' => 'name',
                 'multiple'     => false,
                 'expanded'     => true,
             ))
-
-            ->add('adresse',     EmailType::class)
-            ->add('tickets', CollectionType::class, array(
-                'entry_type'   => TicketType::class,
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false
+            ->add('number', ChoiceType::class, array(
+                'choices'=> array('1'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5, '6'=>6, '7'=>7, '8'=>8, '9'=>9, '10'=>10 )
             ))
+            ->add('adresse',     EmailType::class)
+
             ->add('save',      SubmitType::class);
     }
     
@@ -41,7 +37,7 @@ class OrderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'EticketBundle\Entity\Order'
+            'data_class' => 'AppBundle\Entity\Order'
         ));
     }
 

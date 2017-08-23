@@ -1,6 +1,6 @@
 <?php
 
-namespace EticketBundle\Entity;
+namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Type
  *
  * @ORM\Table(name="type")
- * @ORM\Entity(repositoryClass="EticketBundle\Repository\TypeRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeRepository")
  */
 class Type
 {

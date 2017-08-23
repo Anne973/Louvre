@@ -1,0 +1,41 @@
+{% extends "::layout.html.twig" %}
+{% block title %}{{parent()}} - Sélection -Etape 2{% endblock %}
+
+{% block selection %}
+
+    <div class="well">
+
+
+
+
+            {{ form_start(form)}}
+
+            {# Les erreurs générales du formulaire. #}
+            {{ form_errors(form) }}
+
+
+            {{ form_label(form.tickets, "Billets ", {'label_attr': {'class': 'control-label'}}) }}
+
+    {% for ticket in form.tickets %}
+        <h3>Billet n°{{ loop.index}}</h3>
+        {{ form_row(ticket.lastname) }}
+        {{  form_row(ticket.firstname) }}
+        {{  form_row(ticket.country) }}
+        {{  form_row(ticket.birthdate) }}
+        {{  form_row(ticket.reduced) }}
+
+        <hr>
+
+    {%endfor%}
+
+
+
+
+
+
+            {# Fermeture de la balise <form> du formulaire HTML #}
+            {{ form_end(form) }}
+        </div>
+
+
+{% endblock %}

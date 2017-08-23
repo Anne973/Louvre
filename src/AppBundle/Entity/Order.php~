@@ -1,6 +1,6 @@
 <?php
 
-namespace EticketBundle\Entity;
+namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Order
  *
  * @ORM\Table(name="louvre.order")
- * @ORM\Entity(repositoryClass="EticketBundle\Repository\OrderRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  */
 
 class Order
 {
     /**
-     * @ORM\OneToMany(targetEntity="EticketBundle\Entity\Ticket", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="order", cascade={"persist"})
      */
     private $tickets;
 
@@ -35,7 +35,7 @@ class Order
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EticketBundle\Entity\Type")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Type")
      * @ORM\JoinColumn(nullable=false)
      */
     private $type;
@@ -47,7 +47,12 @@ class Order
      */
     private $adresse;
 
-
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
 
     public function __construct()
     {
@@ -119,11 +124,11 @@ class Order
     /**
      * Set type
      *
-     * @param \EticketBundle\Entity\Type $type
+     * @param \AppBundle\Entity\Type $type
      *
      * @return Order
      */
-    public function setType(\EticketBundle\Entity\Type $type)
+    public function setType(\AppBundle\Entity\Type $type)
     {
         $this->type = $type;
 
@@ -133,7 +138,7 @@ class Order
     /**
      * Get type
      *
-     * @return \EticketBundle\Entity\Type
+     * @return \AppBundle\Entity\Type
      */
     public function getType()
     {
@@ -143,11 +148,11 @@ class Order
     /**
      * Add ticket
      *
-     * @param \EticketBundle\Entity\Ticket $ticket
+     * @param \AppBundle\Entity\Ticket $ticket
      *
      * @return Order
      */
-    public function addTicket(\EticketBundle\Entity\Ticket $ticket)
+    public function addTicket(\AppBundle\Entity\Ticket $ticket)
     {
         $this->tickets[] = $ticket;
 
@@ -160,9 +165,9 @@ class Order
     /**
      * Remove ticket
      *
-     * @param \EticketBundle\Entity\Ticket $ticket
+     * @param \AppBundle\Entity\Ticket $ticket
      */
-    public function removeTicket(\EticketBundle\Entity\Ticket $ticket)
+    public function removeTicket(\AppBundle\Entity\Ticket $ticket)
     {
         $this->tickets->removeElement($ticket);
     }
@@ -176,4 +181,16 @@ class Order
     {
         return $this->tickets;
     }
+
+    public function getPrixTotal()
+    {
+        $prix = 0;
+        foreach ($this->getTickets()as $ticket)
+        {
+            $birthday=$ticket->getBirthdate();
+            $prix += $ticket->getTarif($birthday);
+        }
+        return $prix;
+
+}
 }

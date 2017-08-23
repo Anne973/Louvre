@@ -1,0 +1,72 @@
+{% extends "::layout.html.twig" %}
+{% block title %}{{parent()}} - Sélection{% endblock %}
+
+{% block selection %}
+
+<div class="well">
+
+
+    <h3>Reservation</h3>
+
+    <div class="well">
+        {{ form_start(form)}}
+
+        {# Les erreurs générales du formulaire. #}
+        {{ form_errors(form) }}
+
+        {# Génération du label + error + widget pour un champ. #}
+        <div class="form-group">
+            <p>{{ form_label(form.date, "Choisissez une date", {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_errors(form.date) }}
+
+            </p>
+
+            <p>
+                {{ form_widget(form.date) }}
+            </p>
+        </div>
+        <div class="form-group">
+        <p>{{ form_label(form.type, "Choisissez un type de billet", {'label_attr': {'class':'control-label'}})}}</p>
+            <p> {{ form_widget(form.type) }}
+            </p>
+        </div>
+
+        {#<div class="form-group">
+            <p>{{ form_label(form.tickets, "Choisissez un tarif", {'label_attr': {'class':'control-label'}})}}</p>
+            <p> {{ form_widget(form.tickets) }}
+            {#{{ form_row(form.tickets) }}
+        <a href="#" id="add_ticket" class="btn btn-primary">Ajouter un billet</a>
+        </div>#}
+
+        <div class="form-group">
+            <p>{{ form_label(form.adresse, "Entrez votre adresse email", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.adresse) }}
+            </p>
+
+            <p>
+                {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>{{ form_label(form.number, "Choisissez le nombre de billets", {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_errors(form.number) }}
+            </p>
+
+            <p>
+                {{ form_widget(form.number, {'attr': {'class': 'form-control'}}) }}
+            </p>
+        </div>
+
+
+        {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+
+
+        {# Fermeture de la balise <form> du formulaire HTML #}
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}
