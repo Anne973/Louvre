@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Order
@@ -15,6 +16,7 @@ class Order
 {
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="order", cascade={"persist"})
+     * @Assert\Valid()
      */
     private $tickets;
 
@@ -182,13 +184,13 @@ class Order
         return $this->tickets;
     }
 
-    public function getPrixTotal()
+    public function getTarif()
     {
         $prix = 0;
         foreach ($this->getTickets()as $ticket)
         {
-            $birthday=$ticket->getBirthdate();
-            $prix += $ticket->getTarif($birthday);
+
+            $prix += $ticket->getTarif();
         }
         return $prix;
 

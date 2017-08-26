@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Ticket
  *
@@ -214,29 +215,30 @@ class Ticket
         return $this->firstname;
     }
 
-    public function getAge($birthday)
-    {   $birthday=date("d/m/Y");
-        $arr1 = explode('/', $birthday);
-        $arr2 = explode('/', date('d/m/Y'));
-        if(($arr1[1] < $arr2[1]) || (($arr1[1] == $arr2[1]) && ($arr1[0] <= $arr2[0])))
-            return $arr2[2] - $arr1[2];
-        else{
-        return $age=$arr2[2] - $arr1[2] - 1;}
-    }
-
     public function getTarif()
     {
-        $age=$this->getAge($this->getBirthdate());
-        if ($this->reduced == false)
-        {
-            if($age<4){return 0;}
-            elseif(($age>=4)&&($age<12)){return 8;}
-            elseif(($age>=12)&&($age)<60){return 16;}
-            elseif($age>=60){return 12;}
-        }
+        $birthday = ($this->getBirthdate());
+        $price=0;
+        $day = ($this->getOrder()->getDate());
 
-        else {return 10;}
+        $interval = $day->diff($birthday);
+
+        if ($this->reduced == false) {
+            if ($interval->y < 4) {
+                $price=0;
+            } elseif (($interval->y >= 4) && ($interval->y < 12)) {
+                $price=8;
+            } elseif (($interval->y >= 12) && ($interval)->y < 60) {
+                $price=16;
+            } elseif ($interval->y >= 60) {
+                $price=12;
+            }
+        } else {
+            $price=10;
+        }
+        return $price*$this->getOrder()->getType()->getCoeff();
     }
+
 
 
     /**

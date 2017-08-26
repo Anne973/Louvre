@@ -11,6 +11,7 @@ use AppBundle\Form\OrderStepOneType;
 use AppBundle\Form\OrderStepTwoType;
 
 
+use AppBundle\Manager\OrderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,12 +23,10 @@ class OrderController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/selection_step_one", name="eticket_selection_step_one")
      */
-    public function selectStepOneAction(Request $request)
+    public function selectStepOneAction(Request $request, OrderManager $orderManager)
     {
-        //on crée un objet Order
-        $order = new Order();
-        $type=new Type();
-        $session = $request->getSession()->set('order',$order);
+
+        $order=$orderManager->stepOne();
 
 
 
@@ -37,6 +36,9 @@ class OrderController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted()&& $form->isValid()){
+
+
+
 
            return $this->redirectToRoute('eticket_selection_step_two');
 
@@ -54,45 +56,41 @@ class OrderController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/selection_step_two", name="eticket_selection_step_two")
      */
-    public function selectStepTwoAction(Request $request)
+    public function selectStepTwoAction(Request $request, OrderManager $orderManager)
     {
-        $session = $request->getSession();
-        $order = $session->get('order');
-        $number = $session->get('order')->getNumber();
-        for ($i =0; $i < $number; $i++) {
-            $order->addTicket(new Ticket());
+            $order=$orderManager->stepTwo();
 
 
-            $form = $this->get('form.factory')->create(OrderStepTwoType::class, $order);
+
+            $form = $this->createForm(OrderStepTwoType::class, $order);
             $form->handleRequest($request);
-            // On passe la méthode createView() du formulaire à la vue
+
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($order);
-                $em->flush();
 
-                return $this->redirectToRoute('eticket_ticket', array('id' => $order->getId()));
+
+                return $this->redirectToRoute('eticket_ticket');
             }
-            var_dump($form->getData());
+
             return $this->render(':Order:selectStepTwo.html.twig', array(
                 'form' => $form->createView(),
+                'order'=>$order
             ));
         }
-    }
+
 
 
         /**
          * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("/ticket/{id}", name="eticket_ticket")
+         * @Route("/ticket", name="eticket_ticket")
          */
         public
-        function ticketAction(Order $order)
+        function ticketAction(Request $request)
         {
 
             return $this->render(':Order:ticket.html.twig', array(
-                'order' => $order
+                'order'=>$request->getSession()->get('order')
             ));
         }
 
