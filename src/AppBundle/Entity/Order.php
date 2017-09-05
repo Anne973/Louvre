@@ -1,19 +1,30 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Validator\NotPastDays;
+use AppBundle\Validator\NotClosingDay;
+use AppBundle\Validator\NotPublicHoliday;
+use AppBundle\Validator\NotSunday;
+use AppBundle\Validator\NoTicket;
+use AppBundle\Validator\NotTuesday;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Order
  *
  * @ORM\Table(name="louvre.order")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
+ * @NoTicket()
  */
 
 class Order
 {
+    const MAX_TICKETS_PER_DAY = 1000;
+
+    const MAX_HOUR_FOR_FULL_DAY = '14';
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ticket", mappedBy="order", cascade={"persist"})
      * @Assert\Valid()
@@ -31,12 +42,19 @@ class Order
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
+     * @Assert\Date()
+     * @Assert\GreaterThanOrEqual("today")
+     * @NotTuesday()
+     * @NotSunday()
+     * @NotClosingDay()
+     * @NotPublicHoliday()
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Type", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -44,8 +62,11 @@ class Order
 
     /**
      * @var string
-     *
      * @ORM\Column(name="adresse", type="string", length=255)
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     *     )
      */
     private $adresse;
 
@@ -55,6 +76,12 @@ class Order
      * @ORM\Column(name="number", type="integer")
      */
     private $number;
+
+    /**
+     * @var string
+     * @ORM\Column(name="stripe_id", type="string", length=255)
+     */
+    private $stripe_id;
 
     public function __construct()
     {
@@ -218,5 +245,49 @@ class Order
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+
+    public function validate(ExecutionContextInterface $context,$payload)
+    {
+
+            $today = new \DateTime;
+            if (($this->date->format('Y-m-d') == $today->format('Y-m-d')) && ($today->format('H') >= self::MAX_HOUR_FOR_FULL_DAY)) {
+                if ($this->getType()->getName() == "journée")
+                {
+                    $context
+                    ->buildViolation('vous ne pouvez pas réserver un billet journée')
+                    ->atPath('type')
+                    ->addViolation();
+
+            }
+        }
+    }
+
+    /**
+     * Set stripeId
+     *
+     * @param string $stripeId
+     *
+     * @return Order
+     */
+    public function setStripeId($stripeId)
+    {
+        $this->stripe_id = $stripeId;
+
+        return $this;
+    }
+
+    /**
+     * Get stripeId
+     *
+     * @return string
+     */
+    public function getStripeId()
+    {
+        return $this->stripe_id;
     }
 }

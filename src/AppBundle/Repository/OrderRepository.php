@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class OrderRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function countTickets(\DateTime $date)
+    {
+        $qb=$this->createQueryBuilder('o')
+            ->select('SUM(o.number)')
+            ->where ('o.date = :date')
+            ->setParameter('date',$date);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

@@ -1,7 +1,11 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Contact;
+use AppBundle\Form\ContactType;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends Controller
@@ -14,6 +18,42 @@ class HomeController extends Controller
     {
         return $this->render(':Home:index.html.twig');
     }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/contact", name="eticket_contact")
+     */
+    public function contactAction(Request $request, \Swift_Mailer $mailer)
+    {
+        $contact=new Contact;
+        $form =$this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()&& $form->isValid())
+        {
+            $message = (new Swift_Message('Contact from Eticket louvre'))
+                ->setFrom($contact->getEmail())
+                ->setTo($this->getParameter('mailer_user'))
+                ->setBody(
+                    $this->renderView(
+                    // app/Resources/views/Emails/registration.html.twig
+                        'Emails/registration.html.twig',
+                        array('contact' => $contact)
+                    ),
+                    'text/html'
+                )
+
+            ;
+
+            $mailer->send($message);
+
+
+            return $this->render(':Home:confirmation.html.twig');
+        }
+        return $this-> render(':Home:contact.html.twig', array(
+            'form' => $form->createView()));
+    }
+
 }
 /**
  * Created by PhpStorm.

@@ -33,3 +33,9 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    eticket.valivator.noticket:
+        class: AppBundle\Validator\NoTicketValidator
+        arguments:
+          - "@doctrine.orm.entity_manager"
+        tags:
+          - { name: validator.constraint_validator, alias: eticket_noticket }

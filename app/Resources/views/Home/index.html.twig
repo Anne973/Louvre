@@ -1,11 +1,19 @@
 {% extends "::layout.html.twig" %}
 
 {% block selection %}
-    <p>Bienvenue sur le site officiel de billetterie du Louvre!</p>
-<section class="row">
-    <div class="col-sm-5 "><img src="{{ asset('images/Louvre2.jpg') }}" ></div>
-    <div class="col-sm-5 "><img src="{{ asset('images/Louvre3.jpg') }}"></div>
 
-</section>
-<a  href="{{ path('eticket_selection_step_one') }}"> <button type="button" class="btn btn-primary btn-lg btn-block" style="display:block">Sélectionnez vos billets</button></a><!doctype html>
-{% endblock %}
+
+    <h3 style="text-align: center; ">Bienvenue sur le site officiel de billetterie du Louvre!</h3>
+    <section class="row">;
+   <div class="hidden-xs col-sm-12"><img src="{{ asset('images/Louvre11.jpg') }}" ></div>
+        <div class="visible-xs col-sm-12"><img src="{{ asset('images/Louvre10.jpg') }}" ></div>
+
+
+    </section>
+    <section class="row" style="padding-top:20px";>
+        <div class="col-sm-12">
+        <a  href="{{ path('eticket_selection_step_one') }}"> <button type="button" class="btn btn-primary btn-lg btn-block" style="display:block">Sélectionnez vos billets</button></a>
+        </div>
+    </section>
+    {% endblock %}
+

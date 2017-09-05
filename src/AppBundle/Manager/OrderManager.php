@@ -46,4 +46,13 @@ class OrderManager
         }
         return $order;
     }
+    public function ticket(){
+        $order = $this->session->get('order');
+        return $order;
+    }
+
+    public function checkout(){
+        $order = $this->session->get('order');
+        return $order;
+    }
 }

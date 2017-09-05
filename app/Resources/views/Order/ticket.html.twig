@@ -36,12 +36,12 @@
  src="https://checkout.stripe.com/checkout.js" class="stripe-button"
  data-key="pk_test_qBXsoomKdxHdqCimKzQqD2C6"
  data-amount="{{ order.tarif*100 }}"
- data-name="Stripe.com"
- data-description="Widget"
- data-image="{{ asset('images/pyramide.jpg') }}"
+ data-name="EticketLouvre"
+ data-description="Réservation"
+ data-image="{{ asset('images/louvre.png') }}"
  data-locale="auto"
- data-receipt_email="{{ order.adresse }}"
  data-currency ="eur"
+ data-email = "{{ order.adresse }}"
  data-zip-code="true">
 </script>
 </form>
