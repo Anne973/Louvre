@@ -11,16 +11,19 @@ namespace AppBundle\Manager;
 
 use AppBundle\Entity\Order;
 use AppBundle\Entity\Ticket;
+use AppBundle\Entity\Type;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class OrderManager
 {
     private $session;
+    private $em;
 
-    public function __construct(Session $session)
+    public function __construct(Session $session, EntityManagerInterface $em)
     {
         $this->session = $session;
-
+        $this->em=$em;
 
     }
 
@@ -48,11 +51,9 @@ class OrderManager
     }
     public function ticket(){
         $order = $this->session->get('order');
+        $order->setType($this->em->getRepository(Type::class)->find($order->getType()->getId()));
         return $order;
     }
 
-    public function checkout(){
-        $order = $this->session->get('order');
-        return $order;
-    }
+
 }

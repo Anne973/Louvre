@@ -79,9 +79,9 @@ class Order
 
     /**
      * @var string
-     * @ORM\Column(name="stripe_id", type="string", length=255)
+     * @ORM\Column(name="stripe", type="string", length=255)
      */
-    private $stripe_id;
+    private $stripe;
 
     public function __construct()
     {
@@ -267,27 +267,29 @@ class Order
         }
     }
 
+
+
     /**
-     * Set stripeId
+     * Set stripe
      *
-     * @param string $stripeId
+     * @param string $stripe
      *
      * @return Order
      */
-    public function setStripeId($stripeId)
+    public function setStripe($stripe)
     {
-        $this->stripe_id = $stripeId;
+        $this->stripe = $stripe;
 
         return $this;
     }
 
     /**
-     * Get stripeId
+     * Get stripe
      *
      * @return string
      */
-    public function getStripeId()
+    public function getStripe()
     {
-        return $this->stripe_id;
+        return $this->stripe;
     }
 }

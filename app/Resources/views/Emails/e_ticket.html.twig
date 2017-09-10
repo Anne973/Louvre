@@ -1,2 +1,16 @@
-<h1>Votre réservation</h1>
-<p>Commande n° {{order.id  }}</p>
+<div style="text-align:center; background-color:#555555;">
+    <img style="padding-top:20px" src="{{ absolute_url(asset('images/louvre2.png')) }}" >
+
+    <h1 style="padding-bottom:20px; color: white">Le Louvre Eticket</h1>
+</div>
+    <h2>Votre Réservation </h2>
+<p>Date : {{order.date|date('d/m/Y') }}</p>
+<p>Référence commande : {{ order.stripe }} </p>
+<p>{{ order.number}} billet{{ order.number>1? "s":"" }} {{ order.type.name }}</p>
+
+{% for ticket in order.tickets %}
+    <hr>
+    <p>Nom : {{ticket.lastname}}</p>
+    <p>Prénom : {{ticket.firstname }}</p>
+    <p>Tarif : {{ ticket.tarif }} euros</p>
+{%endfor %}

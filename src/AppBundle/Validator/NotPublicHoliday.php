@@ -17,5 +17,5 @@ use Symfony\Component\Validator\Constraint;
 class NotPublicHoliday extends Constraint
 
 {
-public $message = "La réservation est impossible ce jour";
+public $message = "La réservation est impossible ce jour.";
 }

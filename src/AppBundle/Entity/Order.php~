@@ -79,9 +79,9 @@ class Order
 
     /**
      * @var string
-     * @ORM\Column(name="stripe_id", type="string", length=255)
+     * @ORM\Column(name="stripe", type="string", length=255)
      */
-    private $stripe_id;
+    private $stripe;
 
     public function __construct()
     {
@@ -266,4 +266,6 @@ class Order
             }
         }
     }
+
+
 }

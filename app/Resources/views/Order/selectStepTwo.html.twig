@@ -2,8 +2,9 @@
 {% block title %}{{parent()}} - Sélection -Etape 2{% endblock %}
 
 {% block selection %}
+    {{ dump(order) }}
 
-    <div class="well">
+    <div class="well" style="margin-top :15px;">
 
 
 
@@ -14,7 +15,7 @@
             {{ form_errors(form) }}
 
 
-            {{ form_label(form.tickets, "Billets ", {'label_attr': {'class': 'control-label'}}) }}
+
 
     {% for ticket in form.tickets %}
         <h3>Billet n°{{ loop.index}}</h3>

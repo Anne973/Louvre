@@ -2,6 +2,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\Order;
 
 
@@ -40,7 +41,7 @@ class OrderController extends Controller
         if($form->isSubmitted()&& $form->isValid()){
 
 
-
+    dump($order);
 
            return $this->redirectToRoute('eticket_selection_step_two');
 
@@ -105,12 +106,12 @@ class OrderController extends Controller
                         "receipt_email" => $order->getAdresse(),
                         "source" => $token,
                     ]);
-                    $order->setStripeId($charge->id);
+                    $order->setStripe($charge->id);
 
                     $em->persist($order);
                     $em->flush();
 
-                    return $this ->redirectToRoute('eticket_checkout');
+                    return $this ->redirectToRoute('eticket_checkout', array('stripe'=>$order->getStripe()));
                 }
                 catch(\Stripe\Error\Card $e){
                     return $this ->redirectToRoute('eticket_ticket');
@@ -125,10 +126,13 @@ class OrderController extends Controller
 
         /**
          * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("/checkout", name="eticket_checkout")
+         * @Route("/checkout/{stripe}", name="eticket_checkout")
          */
-            public  function checkoutAction(OrderManager $orderManager, Swift_Mailer $mailer)
-         {   $order = $orderManager->checkout();
+            public  function checkoutAction(Order $order, Swift_Mailer $mailer)
+         {
+
+
+
              $message = (new Swift_Message('Votre réservation'))
                  ->setFrom($this->getParameter('mailer_user'))
                  ->setTo($order->getAdresse())
@@ -144,7 +148,7 @@ class OrderController extends Controller
              ;
 
              $mailer->send($message);
-             return $this->render(':Order:checkout.html.twig');
+             return $this->render(':Order:checkout.html.twig', array('order'=>$order));
 
          }
 

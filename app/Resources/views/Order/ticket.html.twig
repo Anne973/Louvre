@@ -5,7 +5,7 @@
 
 
 
-        <div class="well">
+        <div class="well" style="margin-top :15px;">
         <h3> Votre commande : {{ order.number}}
 
         Billet{{ order.number>1? "s":"" }}
@@ -21,10 +21,10 @@
      <p>Billet n° {{ loop.index }}</p>
      <p>Nom : {{ticket.lastname}}</p>
      <p>Prénom : {{ticket.firstname }}</p>
-     <p>Tarif : {{ ticket.tarif }}euros</p>
+     <p>Tarif : {{ ticket.tarif }} euros</p>
  {%endfor %}
  <hr>
- <p>Tarif total : {{ order.tarif }}euros</p>
+ <p>Tarif total : {{ order.tarif }} euros</p>
 
 
 </div>
