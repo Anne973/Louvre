@@ -1,0 +1,7 @@
+'Le musée est fermé le mardi, veuillez choisir une autre date': 'The museum is closed on tuesdays, please select another day'
+'Le musée est fermé les 1er mai, 1er novembre et 25 décembre, veuillez choisir une autre date': 'the museum is closed on 1 may, 1 november, 31 december'
+'Il n''y a plus de tickets disponibles ce jour, veuillez choisir une autre date': 'not tickets available this day, please select another date'
+'La réservation est impossible ce jour.': 'we cannot proceed with reservation this day'
+'Le musée est fermé le dimanche, veuillez choisir une autre date': 'The museum is closed on sundays, please select another day'
+'vous ne pouvez pas réserver un billet journée': 'you can''t book a daily ticket'
+"L'email {{ value }} n'est pas valide.": "The email {{ value }} is not a valid email."

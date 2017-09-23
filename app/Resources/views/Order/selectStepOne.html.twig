@@ -6,7 +6,7 @@
 <div class="well" style="margin-top :15px;">
 
 
-    <h3 style="margin-top:10px;">Réservation</h3>
+    <h3 style="margin-top:10px;">{{'Réservation'|trans }}</h3>
 
     <div class="well">
         {{ form_start(form)}}
@@ -16,7 +16,7 @@
 
         {# Génération du label + error + widget pour un champ. #}
         <div class="form-group">
-            <p>{{ form_label(form.date, "Choisissez une date", {'label_attr': {'class': 'control-label'}}) }}
+            <p>{{ form_label(form.date, "Choisissez une date"|trans, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_errors(form.date) }}
 
             </p>
@@ -27,22 +27,17 @@
         </div>
         <div class="form-group">
 
-        <p>{{ form_label(form.type, "Choisissez un type de billet", {'label_attr': {'class':'control-label'}})}}
+        <p>{{ form_label(form.type, "Choisissez un type de billet"|trans, {'label_attr': {'class':'control-label'}})}}
             {{ form_errors(form.type) }}
         </p>
             <p> {{ form_widget(form.type) }}
             </p>
         </div>
 
-        {#<div class="form-group">
-            <p>{{ form_label(form.tickets, "Choisissez un tarif", {'label_attr': {'class':'control-label'}})}}</p>
-            <p> {{ form_widget(form.tickets) }}
-            {#{{ form_row(form.tickets) }}
-        <a href="#" id="add_ticket" class="btn btn-primary">Ajouter un billet</a>
-        </div>#}
+
 
         <div class="form-group">
-            <p>{{ form_label(form.adresse, "Entrez votre adresse email", {'label_attr': {'class': 'control-label'}}) }}
+            <p>{{ form_label(form.adresse, "Entrez votre adresse email"|trans, {'label_attr': {'class': 'control-label'}}) }}
             {{ form_errors(form.adresse) }}
             </p>
 
@@ -52,7 +47,7 @@
         </div>
 
         <div class="form-group">
-            <p>{{ form_label(form.number, "Choisissez le nombre de billets", {'label_attr': {'class': 'control-label'}}) }}
+            <p>{{ form_label(form.number, "Choisissez le nombre de billets"|trans, {'label_attr': {'class': 'control-label'}}) }}
                 {{ form_errors(form.number) }}
             </p>
 

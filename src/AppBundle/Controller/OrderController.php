@@ -24,7 +24,7 @@ class OrderController extends Controller
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/selection_step_one", name="eticket_selection_step_one")
+     * @Route("{_locale}/selection_step_one", name="eticket_selection_step_one")
      */
     public function selectStepOneAction(Request $request, OrderManager $orderManager)
     {
@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/selection_step_two", name="eticket_selection_step_two")
+     * @Route("{_locale}/selection_step_two", name="eticket_selection_step_two")
      */
     public function selectStepTwoAction(Request $request, OrderManager $orderManager)
     {
@@ -86,7 +86,7 @@ class OrderController extends Controller
 
         /**
          * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("/ticket", name="eticket_ticket")
+         * @Route("{_locale}/ticket", name="eticket_ticket")
          */
         public function ticketAction(Request $request, OrderManager $orderManager)
         {
@@ -126,7 +126,7 @@ class OrderController extends Controller
 
         /**
          * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("/checkout/{stripe}", name="eticket_checkout")
+         * @Route("{_locale}/checkout/{stripe}", name="eticket_checkout")
          */
             public  function checkoutAction(Order $order, Swift_Mailer $mailer)
          {

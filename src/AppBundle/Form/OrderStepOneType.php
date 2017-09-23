@@ -15,6 +15,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class OrderStepOneType extends AbstractType
 {
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,6 +26,7 @@ class OrderStepOneType extends AbstractType
             ->add('type', EntityType::class, array(
                 'class'        => 'AppBundle:Type',
                 'choice_label' => 'name',
+                'choice_translation_domain'=> 'messages',
                 'multiple'     => false,
                 'expanded'     => true,
             ))

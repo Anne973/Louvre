@@ -8,13 +8,26 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 class Contact
 {
+    /**
+     * @Assert\Email(
+     *     message = "L'email {{ value }} n'est pas valide.",
+     *     checkMX = true
+     *     )
+     */
     private $email;
 
+    /**
+     * @Assert\NotBlank()
+     */
     private $subject;
 
+    /**
+     * @Assert\NotBlank()
+     */
     private $message;
 
     /**

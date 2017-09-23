@@ -6,25 +6,25 @@
 
 
         <div class="well" style="margin-top :15px;">
-        <h3> Votre commande : {{ order.number}}
+        <h3> {{'Votre commande :'|trans }} {{ order.number}}
 
-        Billet{{ order.number>1? "s":"" }}
+        {{'Billet'|trans}}{{ order.number>1? "s":"" }} {{ order.type.name|trans}}
 
         </h3>
-            <p>Date de réservation : {{ order.date|date('d/m/Y') }} </p>
-        <p>Type de billet : {{ order.type.name}}    </p>
+            <p>{{'Date de réservation :'|trans}} {{ order.date|date('d/m/Y') }} </p>
+
 
 
 
  {% for ticket in order.tickets %}
      <hr>
-     <p>Billet n° {{ loop.index }}</p>
-     <p>Nom : {{ticket.lastname}}</p>
-     <p>Prénom : {{ticket.firstname }}</p>
-     <p>Tarif : {{ ticket.tarif }} euros</p>
+     <p>{{'Billet n°'|trans}} {{ loop.index }}</p>
+     <p>{{'Nom :'|trans}} {{ticket.lastname}}</p>
+     <p>{{'Prénom :'|trans}} {{ticket.firstname}}</p>
+     <p>{{'Tarif :'|trans}} {{ ticket.tarif }} euros</p>
  {%endfor %}
  <hr>
- <p>Tarif total : {{ order.tarif }} euros</p>
+ <p>{{'Tarif total :'|trans}} {{ order.tarif }} euros</p>
 
 
 </div>
@@ -37,7 +37,7 @@
  data-key="pk_test_qBXsoomKdxHdqCimKzQqD2C6"
  data-amount="{{ order.tarif*100 }}"
  data-name="EticketLouvre"
- data-description="Réservation"
+ data-description={{'Réservation'|trans}}
  data-image="{{ asset('images/louvre.png') }}"
  data-locale="auto"
  data-currency ="eur"

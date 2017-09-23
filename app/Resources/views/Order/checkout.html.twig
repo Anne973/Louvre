@@ -4,8 +4,8 @@
 {% block selection %}
 
     <div class="well" style="margin-top:15px;">
-        <p>Votre paiement a été effectué!</p>
-        <p>Un e-ticket a été adressé à {{ order.adresse }}</p>
-        <a  href="{{ path("eticket_homepage") }}"> <button type="button" class="btn btn-primary" style="display:block;margin-top:20px;">Retour à l'accueil</button></a>
+        <p>{{'Votre paiement a été effectué'|trans }} !</p>
+        <p>{{'Un e-ticket a été adressé à'|trans}} {{ order.adresse }}</p>
+        <a  href="{{ path("eticket_homepage") }}"> <button type="button" class="btn btn-primary" style="display:block;margin-top:20px;">{{ "Retour à l''accueil"|trans }}</button></a>
     </div>
 {% endblock %}

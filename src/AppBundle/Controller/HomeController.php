@@ -5,6 +5,7 @@ use AppBundle\Entity\Contact;
 use AppBundle\Form\ContactType;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,7 +13,7 @@ class HomeController extends Controller
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/", name="eticket_homepage")
+     * @Route("{_locale}/", name="eticket_homepage")
      */
     public function indexAction()
     {
@@ -21,7 +22,15 @@ class HomeController extends Controller
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/contact", name="eticket_contact")
+     * @Route("{_locale}/mentions_legales", name="eticket_legales")
+     */
+    public function legalesAction()
+    {
+        return $this->render(':Home:legales.html.twig');
+    }
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("{_locale}/contact", name="eticket_contact")
      */
     public function contactAction(Request $request, \Swift_Mailer $mailer)
     {
@@ -53,6 +62,28 @@ class HomeController extends Controller
         return $this-> render(':Home:contact.html.twig', array(
             'form' => $form->createView()));
     }
+
+    /**
+     * @param null $language
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/{language}", name="setLocale")
+     */
+    public function setLocaleAction($language=null)
+    {
+
+        if($language != null)
+        {
+            // On enregistre la langue en session
+            $this->get('session')->set('_locale', $language);
+        }
+
+        // on tente de rediriger vers la page d'origine
+        $url = $this->container->get('request')->headers->get('referer');
+
+
+        return new RedirectResponse($url);
+            }
+
 
 }
 /**

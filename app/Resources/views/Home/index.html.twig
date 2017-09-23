@@ -3,16 +3,16 @@
 {% block selection %}
 
 
-    <h3 style="text-align: center; ">Bienvenue sur le site officiel de billetterie du Louvre!</h3>
-    <section class="row">;
+    <h3 style="text-align: center; background-color: #fffe7f;padding-top :10px;padding-bottom:10px; margin-bottom:0;">{{'Bienvenue sur le site officiel de billetterie du Louvre!'|trans}}</h3>
+    <section class="row">
    <div class="hidden-xs col-sm-12"><img src="{{ asset('images/Louvre11.jpg') }}" ></div>
         <div class="visible-xs col-sm-12"><img src="{{ asset('images/Louvre10.jpg') }}" ></div>
 
 
     </section>
-    <section class="row" style="padding-top:20px";>
+    <section class="row" style="padding-top:20px">
         <div class="col-sm-12">
-        <a  href="{{ path('eticket_selection_step_one') }}"> <button type="button" class="btn btn-primary btn-lg btn-block" style="display:block">Sélectionnez vos billets</button></a>
+        <a  href="{{ path('eticket_selection_step_one') }}"> <button type="button" class="btn btn-primary btn-lg btn-block" style="display:block">{{'Sélectionnez vos billets'|trans}}</button></a>
         </div>
     </section>
     {% endblock %}
