@@ -9,13 +9,22 @@ class OrderControllerTest extends WebTestCase
     //checks that all the URLS load successfully
     public function urlProvider()
     {
-        return array(
+        return [
+            ['/fr/selection_step_one',200],
+            ['/fr/selection_step_two',302],
+            ['/fr/ticket',302],
+        ];
+    }
 
-            array('/fr/selection_step_one'),
-            array('/fr/selection_step_two'),
-            array('/fr/ticket'),
-            array('/fr/checkout/{stripe}'),
-        );
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testUrls($url, $exceptedStatus)
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $url);
+        $this->assertSame($exceptedStatus, $client->getResponse()->getStatusCode());
     }
 
     //check the number of tickets
@@ -23,7 +32,6 @@ class OrderControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->followRedirects();
 
         $crawler = $client->request('GET', '/fr/selection_step_one');
 
@@ -39,24 +47,26 @@ class OrderControllerTest extends WebTestCase
 
         ));
 
+        $crawler = $client->followRedirect();
 
         $this->assertSame(1, $crawler->filter('form h3')->count());
 
 
 
-       /* $step_two_form=$crawler->selectButton('Save')->form();
+        $step_two_form=$crawler->selectButton('Save')->form();
 
         $client->submit($step_two_form, array(
             'order_step_two[tickets][0][lastname]' => 'derenoncourt',
             'order_step_two[tickets][0][firstname]' => 'anne',
-            'order_step_two[tickets][0][country]' =>'France',
+            'order_step_two[tickets][0][country]' =>'FR',
             'order_step_two[tickets][0][birthdate][day]' =>'12',
-            'order_step_two[tickets][0][birthdate][month]' =>'04',
-            'order_step_two[tickets][0][birthdate][year]' =>'1976',
-            'order_step_two[tickets][0][reduced]'=>'false',
+            'order_step_two[tickets][0][birthdate][month]' =>'4',
+            'order_step_two[tickets][0][birthdate][year]' =>'1976'
+        ));
 
+        $crawler = $client->followRedirect();
 
-        ));*/
+        $this->assertSame(2, $crawler->filter('p:contains("16 euros")')->count());
 
     }
 

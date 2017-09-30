@@ -15,72 +15,36 @@ use PHPUnit\Framework\TestCase;
  */
 class OrderTest extends TestCase
 {
-    public function testTarifNormalOrder()
+    /**
+     * @dataProvider orderDatasProvider
+     * @param $coeff
+     * @param $reduce
+     * @param $birthday
+     * @param $expected
+     */
+    public function testTarif($coeff,$reduce,$birthday,$expected)
     {
         $order = new Order();
         $ticket = new Ticket();
         $type= new Type();
-        $type->setCoeff('1');
+        $type->setCoeff($coeff);
 
-        $ticket->setBirthdate(new DateTime('1976-04-12'));
-
+        $ticket->setBirthdate(new DateTime($birthday));
+        $ticket->setReduced($reduce);
         $order -> addTicket($ticket);
         $order->setType($type);
-        $this->assertSame(16,$order->getTarif());
+        $this->assertSame($expected,$order->getTarif());
     }
 
-    public function testTarifEnfantOrder()
-    {
-        $order = new Order();
-        $ticket = new Ticket();
-        $type= new Type();
-        $type->setCoeff('1');
-
-        $ticket->setBirthdate(new DateTime('2007-04-12'));
-
-        $order -> addTicket($ticket);
-        $order->setType($type);
-        $this->assertSame(8,$order->getTarif());
-    }
-
-    public function testTarifGratuitOrder()
-    {
-        $order = new Order();
-        $ticket = new Ticket();
-        $type= new Type();
-        $type->setCoeff('1');
-
-        $ticket->setBirthdate(new DateTime('2015-04-12'));
-
-        $order -> addTicket($ticket);
-        $order->setType($type);
-        $this->assertSame(0,$order->getTarif());
-    }
-
-    public function testTarifSeniorOrder()
-    {
-        $order = new Order();
-        $ticket = new Ticket();
-        $type= new Type();
-        $type->setCoeff('1');
-
-        $ticket->setBirthdate(new DateTime('1940-04-12'));
-
-        $order -> addTicket($ticket);
-        $order->setType($type);
-        $this->assertSame(12,$order->getTarif());
-    }
-
-    public function testTarifReduitOrder()
-    {
-        $order = new Order();
-        $ticket = new Ticket();
-        $type= new Type();
-        $type->setCoeff('1');
-        $ticket->setReduced(true);
-        $ticket->setBirthdate(new DateTime('1976-04-12'));
-        $order -> addTicket($ticket);
-        $order->setType($type);
-        $this->assertSame(10,$order->getTarif());
+    public function orderDatasProvider(){
+        // array(coeff, reduit, dateNaissance, valeurAttendu)
+        return [
+            [1,true,"1976-04-12",10],
+            [1,false,"1940-04-12",12],
+            [1,false,"2007-04-12",8],
+            [1,false,"2015-04-12",0],
+            [1,true,"2015-04-12",0],
+            [1,false,"1976-04-12",16]
+        ];
     }
 }

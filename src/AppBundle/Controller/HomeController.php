@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("{_locale}/", name="eticket_homepage")
+     * @Route("{_locale}/", name="eticket_homepage", requirements={"_locale"="%locales%"})
      */
     public function indexAction()
     {

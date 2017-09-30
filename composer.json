@@ -1,5 +1,6 @@
 {
     "name": "anne/louvre",
+    "description": "Projet billeterie louvre openclassrooms",
     "license": "proprietary",
     "type": "project",
     "autoload": {

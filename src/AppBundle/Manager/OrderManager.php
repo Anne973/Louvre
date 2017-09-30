@@ -37,7 +37,7 @@ class OrderManager
      * @param $order
      * @return bool
      */
-    private function isValidForStep2($order)
+    private function isValidForStep2(Order $order = null)
     {
         ///TODO verifier date + type + number + adresse
         if (isset($order)){
@@ -46,18 +46,19 @@ class OrderManager
             return true;
             }
         }
+        return false;
     }
 
-    private function isValidForRecap($order){
+    private function isValidForRecap(Order $order = null){
         $isValidStep1 = $this->isValidForStep2($order);
 
         if ($isValidStep1){
-            if(!empty($order->getTickets())){
+            if($order->getTickets()->count() === $order->getNumber()){
                 return true;
             }
         }
-        ///TODO est ce que les billets sont bien saisis....
 
+        return false;
     }
 
 

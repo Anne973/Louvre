@@ -204,7 +204,7 @@ class Order
     /**
      * Get tickets
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ArrayCollection|Ticket[]
      */
     public function getTickets()
     {

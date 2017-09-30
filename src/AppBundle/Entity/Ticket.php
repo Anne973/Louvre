@@ -54,7 +54,7 @@ class Ticket
      *
      * @ORM\Column(name="reduced", type="boolean")
      */
-    private $reduced ;
+    private $reduced;
 
 
     private $price;
@@ -77,30 +77,14 @@ class Ticket
         return $this->id;
     }
 
-
-
     /**
-     * Set birthdate
+     * Get reduced
      *
-     * @param \DateTime $birthdate
-     *
-     * @return Ticket
+     * @return bool
      */
-    public function setBirthdate($birthdate)
+    public function getReduced()
     {
-        $this->birthdate = $birthdate;
-
-        return $this;
-    }
-
-    /**
-     * Get birthdate
-     *
-     * @return \DateTime
-     */
-    public function getBirthdate()
-    {
-        return $this->birthdate;
+        return $this->reduced;
     }
 
     /**
@@ -117,16 +101,10 @@ class Ticket
         return $this;
     }
 
-    /**
-     * Get reduced
-     *
-     * @return bool
-     */
-    public function getReduced()
+    public function getPrice()
     {
-        return $this->reduced;
+        return $this->price;
     }
-
 
     public function setPrice($price)
     {
@@ -135,10 +113,109 @@ class Ticket
         return $this;
     }
 
-
-    public function getPrice()
+    /**
+     * Get lastname
+     *
+     * @return string
+     */
+    public function getLastname()
     {
-        return $this->price;
+        return $this->lastname;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     *
+     * @return Ticket
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get firstname
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set firstname
+     *
+     * @param string $firstname
+     *
+     * @return Ticket
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getTarif()
+    {
+        $birthday = ($this->getBirthdate());
+        $price = 0;
+        $day = ($this->getOrder()->getDate());
+
+        $interval = $day->diff($birthday);
+
+        if ($interval->y < 4) {
+            $price = 0;
+        } elseif (($interval->y >= 4) && ($interval->y < 12)) {
+            $price = 8;
+        } elseif (($interval->y >= 12) && ($interval)->y < 60) {
+            $price = 16;
+        } elseif ($interval->y >= 60) {
+            $price = 12;
+        }
+        if ($this->reduced === true && $price > 10) {
+            $price = 10;
+        }
+        return $price * $this->getOrder()->getType()->getCoeff();
+    }
+
+    /**
+     * Get birthdate
+     *
+     * @return \DateTime
+     */
+    public function getBirthdate()
+    {
+        return $this->birthdate;
+    }
+
+    /**
+     * Set birthdate
+     *
+     * @param \DateTime $birthdate
+     *
+     * @return Ticket
+     */
+    public function setBirthdate($birthdate)
+    {
+        $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return \AppBundle\Entity\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 
     /**
@@ -156,90 +233,14 @@ class Ticket
     }
 
     /**
-     * Get order
-     *
-     * @return \AppBundle\Entity\Order
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-
-
-    /**
-     * Set lastname
-     *
-     * @param string $lastname
-     *
-     * @return Ticket
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    /**
-     * Get lastname
+     * Get country
      *
      * @return string
      */
-    public function getLastname()
+    public function getCountry()
     {
-        return $this->lastname;
+        return $this->country;
     }
-
-    /**
-     * Set firstname
-     *
-     * @param string $firstname
-     *
-     * @return Ticket
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    /**
-     * Get firstname
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    public function getTarif()
-    {
-        $birthday = ($this->getBirthdate());
-        $price=0;
-        $day = ($this->getOrder()->getDate());
-
-        $interval = $day->diff($birthday);
-
-        if ($this->reduced == false) {
-            if ($interval->y < 4) {
-                $price=0;
-            } elseif (($interval->y >= 4) && ($interval->y < 12)) {
-                $price=8;
-            } elseif (($interval->y >= 12) && ($interval)->y < 60) {
-                $price=16;
-            } elseif ($interval->y >= 60) {
-                $price=12;
-            }
-        } else {
-            $price=10;
-        }
-        return $price*$this->getOrder()->getType()->getCoeff();
-    }
-
-
 
     /**
      * Set country
@@ -253,15 +254,5 @@ class Ticket
         $this->country = $country;
 
         return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
     }
 }
