@@ -13,6 +13,15 @@ class HomeController extends Controller
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/", name="eticket_redirectpage")
+     */
+     public function redirectAction()
+    {
+        return $this->redirectToRoute('eticket_homepage');
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
      * @Route("{_locale}/", name="eticket_homepage")
      */
     public function indexAction()
@@ -63,26 +72,7 @@ class HomeController extends Controller
             'form' => $form->createView()));
     }
 
-    /**
-     * @param null $language
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/{language}", name="setLocale")
-     */
-    public function setLocaleAction($language=null)
-    {
 
-        if($language != null)
-        {
-            // On enregistre la langue en session
-            $this->get('session')->set('_locale', $language);
-        }
-
-        // on tente de rediriger vers la page d'origine
-        $url = $this->container->get('request')->headers->get('referer');
-
-
-        return new RedirectResponse($url);
-            }
 
 
 }

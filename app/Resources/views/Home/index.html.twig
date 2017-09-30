@@ -1,9 +1,9 @@
-{% extends "::layout.html.twig" %}
+{% extends "::layoutWithSidebar.html.twig" %}
 
 {% block selection %}
 
 
-    <h3 style="text-align: center; background-color: #fffe7f;padding-top :10px;padding-bottom:10px; margin-bottom:0;">{{'Bienvenue sur le site officiel de billetterie du Louvre!'|trans}}</h3>
+    <h3 id="titre">{{'Bienvenue sur le site officiel de billetterie du Louvre!'|trans}}</h3>
     <section class="row">
    <div class="hidden-xs col-sm-12"><img src="{{ asset('images/Louvre11.jpg') }}" ></div>
         <div class="visible-xs col-sm-12"><img src="{{ asset('images/Louvre10.jpg') }}" ></div>

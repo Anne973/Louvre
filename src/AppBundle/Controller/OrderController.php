@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 
@@ -29,30 +30,27 @@ class OrderController extends Controller
     public function selectStepOneAction(Request $request, OrderManager $orderManager)
     {
 
-        $order=$orderManager->stepOne();
-
+        $order = $orderManager->stepOne();
 
 
         // On crée le formulaire
-        $form= $this->createForm(OrderStepOneType::class, $order);
+        $form = $this->createForm(OrderStepOneType::class, $order);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()&& $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
-    dump($order);
-
-           return $this->redirectToRoute('eticket_selection_step_two');
+            return $this->redirectToRoute('eticket_selection_step_two');
 
         }
 
 
-                // On passe la méthode createView() du formulaire à la vue
+        // On passe la méthode createView() du formulaire à la vue
 
-                return $this->render(':Order:selectStepOne.html.twig', array(
-                    'form' => $form->createView(),
-                ));
+        return $this->render(':Order:selectStepOne.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
@@ -61,99 +59,113 @@ class OrderController extends Controller
      */
     public function selectStepTwoAction(Request $request, OrderManager $orderManager)
     {
-            $order=$orderManager->stepTwo();
+        try{
+            $order = $orderManager->stepTwo();
+        }
+        catch(\Exception $e){
+            //set flash error
+
+           $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('accès impossible'));
+
+            //redirection page d'accueil
+            return $this->redirectToRoute('eticket_homepage');
+        }
 
 
-
-            $form = $this->createForm(OrderStepTwoType::class, $order);
-            $form->handleRequest($request);
-
-
-            if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(OrderStepTwoType::class, $order);
+        $form->handleRequest($request);
 
 
+        if ($form->isSubmitted() && $form->isValid()) {
 
+
+            return $this->redirectToRoute('eticket_ticket');
+        }
+
+        return $this->render(':Order:selectStepTwo.html.twig', array(
+            'form' => $form->createView(),
+            'order' => $order
+        ));
+    }
+
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("{_locale}/ticket", name="eticket_ticket")
+     */
+    public function ticketAction(Request $request, OrderManager $orderManager)
+    {
+        try{
+        $order = $orderManager->ticket();
+        }
+
+        catch(\Exception $e){
+            //set flash error
+
+            $this->get('session')->getFlashBag()->add('info','accès impossible');
+
+            //redirection page d'accueil
+            return $this->redirectToRoute('eticket_homepage');
+        }
+        $em = $this->getDoctrine()->getManager();
+        if ($request->isMethod('POST')) {
+            \Stripe\Stripe::setApiKey("sk_test_YHG7jl1vcgMHQGc1jTtoAql1");
+
+            $token = $_POST['stripeToken'];
+            try {
+
+                $charge = \Stripe\Charge::create([
+                    "amount" => ($order->getTarif()) * 100,
+                    "currency" => "eur",
+                    "description" => $order->getNumber() . " entrée(s) - " . $order->getDate()->format('m-d-Y'),
+                    "receipt_email" => $order->getAdresse(),
+                    "source" => $token,
+                ]);
+                $order->setStripe($charge->id);
+
+                $em->persist($order);
+                $em->flush();
+                $this->get('session')->clear();
+
+                return $this->redirectToRoute('eticket_checkout', array('stripe' => $order->getStripe()));
+            } catch (\Stripe\Error\Card $e) {
                 return $this->redirectToRoute('eticket_ticket');
             }
 
-            return $this->render(':Order:selectStepTwo.html.twig', array(
-                'form' => $form->createView(),
-                'order'=>$order
-            ));
         }
 
+        return $this->render(':Order:ticket.html.twig', array(
+            'order' => $request->getSession()->get('order')
+        ));
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("{_locale}/checkout/{stripe}", name="eticket_checkout")
+     */
+    public function checkoutAction(Order $order, Swift_Mailer $mailer)
+    {
 
 
-        /**
-         * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("{_locale}/ticket", name="eticket_ticket")
-         */
-        public function ticketAction(Request $request, OrderManager $orderManager)
-        {
-            $order=$orderManager->ticket();
-            $em=$this->getDoctrine()->getManager();
-            if ($request->isMethod('POST'))
-            {
-                \Stripe\Stripe::setApiKey("sk_test_YHG7jl1vcgMHQGc1jTtoAql1");
+        $message = (new Swift_Message('Votre réservation'))
+            ->setFrom($this->getParameter('mailer_user'))
+            ->setTo($order->getAdresse())
+            ->setBody(
+                $this->renderView(
 
-                $token = $_POST['stripeToken'];
-                try {
+                    'Emails/e_ticket.html.twig',
+                    array('order' => $order)
+                ),
+                'text/html'
+            );
 
-                   $charge = \Stripe\Charge::create([
-                        "amount" => ($order->getTarif())*100,
-                        "currency" => "eur",
-                        "description" => $order->getNumber()." entrée(s) - ".$order->getDate()->format('m-d-Y'),
-                        "receipt_email" => $order->getAdresse(),
-                        "source" => $token,
-                    ]);
-                    $order->setStripe($charge->id);
-
-                    $em->persist($order);
-                    $em->flush();
-
-                    return $this ->redirectToRoute('eticket_checkout', array('stripe'=>$order->getStripe()));
-                }
-                catch(\Stripe\Error\Card $e){
-                    return $this ->redirectToRoute('eticket_ticket');
-                }
-
-            }
-
-            return $this->render(':Order:ticket.html.twig', array(
-                'order'=>$request->getSession()->get('order')
-            ));
-        }
-
-        /**
-         * @return \Symfony\Component\HttpFoundation\Response
-         * @Route("{_locale}/checkout/{stripe}", name="eticket_checkout")
-         */
-            public  function checkoutAction(Order $order, Swift_Mailer $mailer)
-         {
-
-
-
-             $message = (new Swift_Message('Votre réservation'))
-                 ->setFrom($this->getParameter('mailer_user'))
-                 ->setTo($order->getAdresse())
-                 ->setBody(
-                     $this->renderView(
-
-                         'Emails/e_ticket.html.twig',
-                         array('order' => $order)
-                     ),
-                     'text/html'
-                 )
-
-             ;
-
-             $mailer->send($message);
-             return $this->render(':Order:checkout.html.twig', array('order'=>$order));
-
-         }
-
+        $mailer->send($message);
+        return $this->render(':Order:checkout.html.twig', array('order' => $order));
 
     }
+
+
+}
 
 
 

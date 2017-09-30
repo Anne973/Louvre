@@ -33,9 +33,44 @@ class OrderManager
         return $order;
     }
 
+    /**
+     * @param $order
+     * @return bool
+     */
+    private function isValidForStep2($order)
+    {
+        ///TODO verifier date + type + number + adresse
+        if (isset($order)){
+            if (!empty($order->getDate()) && !empty($order->getType()) && !empty($order->getNumber()) && !empty($order->getAdresse()))
+            {
+            return true;
+            }
+        }
+    }
+
+    private function isValidForRecap($order){
+        $isValidStep1 = $this->isValidForStep2($order);
+
+        if ($isValidStep1){
+            if(!empty($order->getTickets())){
+                return true;
+            }
+        }
+        ///TODO est ce que les billets sont bien saisis....
+
+    }
+
+
+
+
+
     public function stepTwo(){
 
-        $order = $this->session->get('order');
+        $order = $this->session->get('order',null);
+
+        if(!$this->isValidForStep2($order)){
+            throw new \Exception();
+        }
 
 
         for ($i =0; $i < $order->getNumber(); $i++) {
@@ -50,7 +85,12 @@ class OrderManager
         return $order;
     }
     public function ticket(){
+
         $order = $this->session->get('order');
+
+        if(!$this->isValidForRecap($order)){
+            throw new \Exception();
+        }
         $order->setType($this->em->getRepository(Type::class)->find($order->getType()->getId()));
         return $order;
     }

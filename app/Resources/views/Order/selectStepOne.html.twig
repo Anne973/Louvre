@@ -1,14 +1,14 @@
-{% extends "::layout.html.twig" %}
+{% extends "::layoutWithSidebar.html.twig" %}
 {% block title %}{{parent()}} - Sélection{% endblock %}
 
 {% block selection %}
 
-<div class="well" style="margin-top :15px;">
+<div class="well">
 
 
     <h3 style="margin-top:10px;">{{'Réservation'|trans }}</h3>
 
-    <div class="well">
+
         {{ form_start(form)}}
 
         {# Les erreurs générales du formulaire. #}
@@ -65,6 +65,6 @@
         {# Fermeture de la balise <form> du formulaire HTML #}
         {{ form_end(form) }}
     </div>
-</div>
+
 
 {% endblock %}

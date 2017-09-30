@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,80 +9,82 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" >
     {% endblock %}
 
 </head>
 <body>
 <div class="container">
 
-    <div id="header" class="row" style="background-color: #555555; padding-top: 10px; padding-bottom:10px;color: white;">
+    <div id="header" class="row" >
         <div class="hidden-xs col-sm-3">
             <img src="{{ asset('images/louvre-pyramid.png') }}" >
         </div>
 
         <div class="col-sm-6">
 
-            <a  href="{{ path("eticket_homepage") }}" ><h1 style="text-align:center; ">Le Louvre Eticket</h1></a>
+            <a  href="{{ path("eticket_homepage") }}" ><h1>Le Louvre Eticket</h1></a>
 
 
-            <h3 style="text-align:center">{{'Billetterie en ligne'|trans}}</h3>
+            <h3>{{'Billetterie en ligne'|trans}}</h3>
         </div>
 
         <div class="col-sm-3">
             <div class="btn-group btn pull-right">
-                <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" style="text-align:right">{{'Langue'|trans }} <span class="caret"></span></button>
+                <button id="language" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">{{'Langue'|trans }} <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path('setLocale', {'language': 'fr'}) }}">{{'Français'|trans}}</a></li>
-                    <li><a href="{{ path('setLocale', {'language': 'en'}) }}">{{'Anglais'|trans}}</a></li>
+                    <li><a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': 'fr'})) }}">{{'Français'|trans}}</a></li>
+                    <li><a href="{{ path(app.request.attributes.get('_route'),  app.request.attributes.get('_route_params')|merge({'_locale': 'en'})) }}">{{'Anglais'|trans}}</a></li>
                 </ul>
             </div>
-
-
-            {# On affiche tous les messages flash dont le nom est « info » #}
-
-            {% for message in app.session.flashbag.get('info') %}
-
-                <p class="alert alert-info">Message flash : {{ message }}</p>
-
-            {% endfor %}
-
         </div>
+
+
+
     </div>
-    <div class="row" style="background-color:lightgrey">
-        <div class="col-sm-8">
+
+    <div id="bloc_principal" class="row">
+        {% for message in app.session.flashbag.get('info') %}
+
+            <div class="alert alert-info"><span class="glyphicon glyphicon-exclamation-sign"></span> {{ message }}</div>
+
+        {% endfor %}
+        <div class="col-sm-{{ (withSidebar|default(false)) ? 8 : 12 }}">
             {% block selection %}
 
 
             {% endblock %}
         </div>
+        {% if withSidebar|default(false)   %}
         <div class="col-sm-4">
-            <div class="row">
+            <div id ="infos" class="row">
                 <div class="col-sm-12 ">
-                    <h3 style="background-color: #fffe7f;padding-top :10px;padding-bottom:10px;padding-left:10px;">{{'Réservations'|trans}}</h3>
-                    <p style="padding-left:10px;">{{'Le musée est ouvert tous les jours sauf le mardi (et fermé les 1er mai, 30 novembre et 25 décembre).'|trans}}</p>
+                    <h3>{{'Réservations'|trans}}</h3>
+                    <p>{{'Le musée est ouvert tous les jours sauf le mardi (et fermé les 1er mai, 30 novembre et 25 décembre).'|trans}}</p>
 
                 </div>
                 <div class="col-sm-12">
-                    <h3 style="background-color: #fffe7f;padding-top :10px;padding-bottom:10px;padding-left:10px;">{{'Tarifs'|trans}}</h3>
-                    <p style="padding-left: 10px">{{'Le musée propose plusieurs types de tarifs:'|trans}}
+                    <h3>{{'Tarifs'|trans}}</h3>
+                    <p>{{'Le musée propose plusieurs types de tarifs:'|trans}}
                     <ul>
                         <li>{{'un tarif normal à partir de 12 ans à 16 euros'|trans}}</li>
                         <li>{{"un tarif enfant à partir de 4 ans et jusqu'à 12 ans, à 8 euros"|trans  }}</li>
                         <li>{{'un tarif senior à partir de 60 ans à 12 euros'|trans}}</li>
-                        <li>{{"un tarif réduit accordé dans certaines conditions (étudiant, employé du musée, d'un service du ministère de la culture, militaire)"|trans }}</li>
+                        <li>{{"un tarif réduit à 10 euros accordé dans certaines conditions (étudiant, employé du musée, d'un service du ministère de la culture, militaire)"|trans }}</li>
                     </ul>
-                    <p style="padding-left: 10px">{{"L'entrée est gratuite pour les enfants de moins de 4 ans."|trans}}</p>
+                    <p>{{"L'entrée est gratuite pour les enfants de moins de 4 ans."|trans}}</p>
 
                 </div>
 
             </div>
         </div>
+        {% endif %}
     </div>
 
 
 
 
-    <div class="row" style="background-color: lightgrey; text-align:center; padding-top:20px;">
+    <div id ="info_paiement" class="row">
 
         <p>{{'Paiement 100% sécurisé'|trans}}
         <i class="fa fa-cc-visa fa-2x " aria-hidden="true" ></i>
@@ -93,8 +95,8 @@
 
 
     <footer class="row" style="background:#555555; padding-top:10px; padding-bottom:10px;color:white">
-        <h3 style ="text-align:center">Musée du Louvre </h3>
-        <ul style="text-align:center" class="list-inline">
+        <h3> Musée du Louvre </h3>
+        <ul class="list-inline">
             <li><a href="http://www.louvre.fr/">Home</a></li>
             <li><a href="{{ path('eticket_legales') }}">{{'Mentions légales'|trans}}</a> </li>
             <li><a href="{{ path('eticket_contact') }}">Contact</a></li>

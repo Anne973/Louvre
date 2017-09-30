@@ -4,4 +4,4 @@
 'La réservation est impossible ce jour.': 'we cannot proceed with reservation this day'
 'Le musée est fermé le dimanche, veuillez choisir une autre date': 'The museum is closed on sundays, please select another day'
 'vous ne pouvez pas réserver un billet journée': 'you can''t book a daily ticket'
-"L'email {{ value }} n'est pas valide.": "The email {{ value }} is not a valid email."
+'L''email {{ value }} n''est pas valide.': 'The email {{ value }} is not a valid email.'
