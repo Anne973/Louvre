@@ -109,10 +109,10 @@ class OrderController extends Controller
             return $this->redirectToRoute('eticket_homepage');
         }
         $em = $this->getDoctrine()->getManager();
-        if ($request->isMethod('POST')) {
+        if ($request->isMethod(Request::METHOD_POST)) {
             \Stripe\Stripe::setApiKey($this->getParameter('stripe_private_key'));
 
-            $token = $_POST['stripeToken'];
+            $token = $request->get('stripeToken');
             try {
 
                 $charge = \Stripe\Charge::create([
