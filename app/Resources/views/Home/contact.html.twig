@@ -1,0 +1,29 @@
+{% extends "::layout.html.twig" %}
+
+{% block selection %}
+
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="well">
+                <h3 >{{ 'Contactez-nous!'|trans }}</h3>
+                {{ form_start(form) }}
+
+                {# Les erreurs générales du formulaire. #}
+                {{ form_errors(form) }}
+
+                {{ form_row(form.email) }}
+
+                <div class="form-group">
+                    {{ form_label(form.subject, "Objet"|trans, {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_errors(form.subject) }}
+                    {{ form_widget(form.subject, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                {{ form_row(form.message) }}
+
+                {# Fermeture de la balise <form> du formulaire HTML #}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

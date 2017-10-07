@@ -1,0 +1,49 @@
+{% extends "::layout.html.twig" %}
+{% block title %}{{parent()}} - Ticket{% endblock %}
+
+{% block selection %}
+
+
+
+        <div class="well">
+        <h3> {{'Votre commande :'|trans }} {{ order.number}}
+
+        {{'billet'|trans}}{{ order.number>1? "s":"" }} {{ order.type.name|trans}}
+
+        </h3>
+            <p>{{'Date de réservation :'|trans}} {{ order.date|date('d/m/Y') }} </p>
+
+
+
+
+ {% for ticket in order.tickets %}
+     <hr>
+     <p>{{'Billet n°'|trans}} {{ loop.index }}</p>
+     <p>{{'Nom :'|trans}} {{ticket.lastname}}</p>
+     <p>{{'Prénom :'|trans}} {{ticket.firstname}}</p>
+     <p>{{'Tarif :'|trans}} {{ ticket.tarif }} euros</p>
+ {%endfor %}
+ <hr>
+ <p>{{'Tarif total :'|trans}} {{ order.tarif }} euros</p>
+
+
+</div>
+
+
+
+<form action="" method="POST">
+<script
+ src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+ data-key="{{ stripe_public_key }}"
+ data-amount="{{ order.tarif*100 }}"
+ data-name="EticketLouvre"
+ data-description={{'Réservation'|trans}}
+ data-image="{{ asset('images/louvre.png') }}"
+ data-locale="auto"
+ data-currency ="eur"
+ data-email = "{{ order.adresse }}"
+ data-allow-remember-me = "false"
+ data-zip-code="false">
+</script>
+</form>
+{% endblock %}

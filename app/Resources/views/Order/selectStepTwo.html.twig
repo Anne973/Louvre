@@ -1,0 +1,64 @@
+{% extends "::layoutWithSidebar.html.twig" %}
+{% block title %}{{parent()}} - Sélection -Etape 2{% endblock %}
+
+{% block selection %}
+
+
+    <div class="well">
+
+
+
+
+            {{ form_start(form)}}
+
+            {# Les erreurs générales du formulaire. #}
+            {{ form_errors(form) }}
+
+
+
+
+    {% for ticket in form.tickets %}
+        <h3>{{'Billet n°'|trans}}{{ loop.index}}</h3>
+        <div class="form-group">
+            {{ form_label(ticket.lastname, "Nom"|trans, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(ticket.lastname) }}
+            {{ form_widget(ticket.lastname, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(ticket.firstname, "Prénom"|trans, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(ticket.firstname) }}
+            {{ form_widget(ticket.firstname, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(ticket.country, "Pays"|trans, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(ticket.country) }}
+            {{ form_widget(ticket.country, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(ticket.birthdate, "Date de naissance"|trans, {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(ticket.birthdate) }}
+            {{ form_widget(ticket.birthdate) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(ticket.reduced, "Tarif réduit"|trans) }}
+            {{ form_errors(ticket.reduced) }}
+            {{ form_widget(ticket.reduced) }}
+        </div>
+
+
+        <hr>
+
+    {%endfor%}
+
+
+
+
+
+
+            {# Fermeture de la balise <form> du formulaire HTML #}
+            {{ form_end(form) }}
+        </div>
+
+
+{% endblock %}
