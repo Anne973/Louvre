@@ -110,7 +110,7 @@ class OrderController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
         if ($request->isMethod('POST')) {
-            \Stripe\Stripe::setApiKey("sk_test_YHG7jl1vcgMHQGc1jTtoAql1");
+            \Stripe\Stripe::setApiKey($this->getParameter('stripe_private_key'));
 
             $token = $_POST['stripeToken'];
             try {
@@ -126,6 +126,8 @@ class OrderController extends Controller
 
                 $em->persist($order);
                 $em->flush();
+                $orderManager->sendConfirmMail($order,$this->getParameter('mailer_user'));
+
                 $this->get('session')->clear();
 
                 return $this->redirectToRoute('eticket_checkout', array('stripe' => $order->getStripe()));
@@ -144,24 +146,9 @@ class OrderController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("{_locale}/checkout/{stripe}", name="eticket_checkout")
      */
-    public function checkoutAction(Order $order, Swift_Mailer $mailer)
+    public function checkoutAction(Order $order)
     {
-
-
-        $message = (new Swift_Message('Votre réservation'))
-            ->setFrom($this->getParameter('mailer_user'))
-            ->setTo($order->getAdresse())
-            ->setBody(
-                $this->renderView(
-
-                    'Emails/e_ticket.html.twig',
-                    array('order' => $order)
-                ),
-                'text/html'
-            );
-
-        $mailer->send($message);
-        return $this->render(':Order:checkout.html.twig', array('order' => $order));
+         return $this->render(':Order:checkout.html.twig', array('order' => $order));
 
     }
 

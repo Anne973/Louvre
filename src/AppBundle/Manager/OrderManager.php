@@ -14,17 +14,21 @@ use AppBundle\Entity\Ticket;
 use AppBundle\Entity\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Twig\Environment;
 
 class OrderManager
 {
     private $session;
     private $em;
+    private $mailer;
+    private $twig;
 
-    public function __construct(Session $session, EntityManagerInterface $em)
+    public function __construct(Session $session, EntityManagerInterface $em, \Swift_Mailer $mailer, Environment $twig)
     {
         $this->session = $session;
         $this->em=$em;
-
+        $this->mailer = $mailer;
+        $this->twig = $twig;
     }
 
     public function stepOne(){
@@ -39,7 +43,7 @@ class OrderManager
      */
     private function isValidForStep2(Order $order = null)
     {
-        ///TODO verifier date + type + number + adresse
+
         if (isset($order)){
             if (!empty($order->getDate()) && !empty($order->getType()) && !empty($order->getNumber()) && !empty($order->getAdresse()))
             {
@@ -47,6 +51,23 @@ class OrderManager
             }
         }
         return false;
+    }
+
+
+    public function sendConfirmMail(Order $order,$from)
+    {
+        $message = (new \Swift_Message('Votre réservation'))
+            ->setFrom($from)
+            ->setTo($order->getAdresse())
+            ->setBody(
+                $this->twig->render(
+                    'Emails/e_ticket.html.twig',
+                    array('order' => $order)
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
     }
 
     private function isValidForRecap(Order $order = null){

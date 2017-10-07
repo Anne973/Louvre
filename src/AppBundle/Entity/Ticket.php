@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -29,14 +30,14 @@ class Ticket
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="lastname", type="string", length=255)
      */
     private $lastname;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="firstname", type="string", length=255)
      */
     private $firstname;
@@ -44,7 +45,7 @@ class Ticket
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="birthdate", type="datetime")
      */
     private $birthdate;

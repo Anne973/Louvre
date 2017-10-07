@@ -1,7 +1,6 @@
 <?php
 
 namespace AppBundle\Entity;
-use AppBundle\Validator\NotPastDays;
 use AppBundle\Validator\NotClosingDay;
 use AppBundle\Validator\NotPublicHoliday;
 use AppBundle\Validator\NotSunday;
