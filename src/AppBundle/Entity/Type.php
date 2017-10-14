@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Type
  *
- * @ORM\Table(name="type")
+ * @ORM\Table(name="louvre_type")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeRepository")
  */
 class Type

@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Order
  *
- * @ORM\Table(name="louvre.order")
+ * @ORM\Table(name="louvre_order")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  * @NoTicket()
  */
